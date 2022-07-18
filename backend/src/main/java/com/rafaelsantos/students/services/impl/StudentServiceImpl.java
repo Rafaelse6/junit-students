@@ -1,9 +1,11 @@
 package com.rafaelsantos.students.services.impl;
 
 import com.rafaelsantos.students.domain.Student;
+import com.rafaelsantos.students.dto.StudentDTO;
 import com.rafaelsantos.students.repositories.StudentRepository;
 import com.rafaelsantos.students.services.StudentService;
 import com.rafaelsantos.students.services.exceptions.ObjectNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,10 @@ import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
+
+    @Autowired
+    private ModelMapper mapper;
+
     @Autowired
     private StudentRepository repository;
 
@@ -23,5 +29,10 @@ public class StudentServiceImpl implements StudentService {
 
     public List<Student> findAll(){
         return repository.findAll();
+    }
+
+    @Override
+    public Student create(StudentDTO obj) {
+        return repository.save(mapper.map(obj, Student.class));
     }
 }
