@@ -38,9 +38,15 @@ public class StudentServiceImpl implements StudentService {
         return repository.save(mapper.map(obj, Student.class));
     }
 
+    @Override
+    public Student update(StudentDTO obj) {
+        findByEmail(obj);
+        return repository.save(mapper.map(obj, Student.class));
+    }
+
     private void findByEmail(StudentDTO obj){
         Optional<Student> student = repository.findByEmail(obj.getEmail());
-        if(student.isPresent()){
+        if(student.isPresent() && !student.get().getId().equals(obj.getId())){
             throw new DataIntegrityViolationException("E-mail already in use");
         }
     }

@@ -9,4 +9,5 @@ public interface StudentService {
     Student findById(Integer id);
     List<Student> findAll();
     Student create(StudentDTO obj);
+    Student update(StudentDTO obj);
 }

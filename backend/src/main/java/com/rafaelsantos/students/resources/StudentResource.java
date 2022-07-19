@@ -37,4 +37,10 @@ public class StudentResource {
                 .buildAndExpand(service.create(obj)).toUri();
         return ResponseEntity.created(uri).build();
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<StudentDTO> update(@PathVariable Integer id, @RequestBody StudentDTO obj){
+        obj.setId(id);
+        return ResponseEntity.ok().body(mapper.map(service.update(obj), StudentDTO.class));
+    }
 }
