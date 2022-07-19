@@ -44,6 +44,12 @@ public class StudentServiceImpl implements StudentService {
         return repository.save(mapper.map(obj, Student.class));
     }
 
+    @Override
+    public void delete(Integer id) {
+        findById(id);
+        repository.deleteById(id);
+    }
+
     private void findByEmail(StudentDTO obj){
         Optional<Student> student = repository.findByEmail(obj.getEmail());
         if(student.isPresent() && !student.get().getId().equals(obj.getId())){

@@ -10,4 +10,5 @@ public interface StudentService {
     List<Student> findAll();
     Student create(StudentDTO obj);
     Student update(StudentDTO obj);
+    void delete(Integer id);
 }
