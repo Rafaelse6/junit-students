@@ -4,6 +4,7 @@ import com.rafaelsantos.students.domain.Student;
 import com.rafaelsantos.students.dto.StudentDTO;
 import com.rafaelsantos.students.repositories.StudentRepository;
 import com.rafaelsantos.students.services.StudentService;
+import com.rafaelsantos.students.services.exceptions.DataIntegrityViolationException;
 import com.rafaelsantos.students.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,14 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student create(StudentDTO obj) {
+        findByEmail(obj);
         return repository.save(mapper.map(obj, Student.class));
+    }
+
+    private void findByEmail(StudentDTO obj){
+        Optional<Student> student = repository.findByEmail(obj.getEmail());
+        if(student.isPresent()){
+            throw new DataIntegrityViolationException("E-mail already in use");
+        }
     }
 }
