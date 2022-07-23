@@ -3,6 +3,7 @@ package com.rafaelsantos.students.services.impl;
 import com.rafaelsantos.students.domain.Student;
 import com.rafaelsantos.students.dto.StudentDTO;
 import com.rafaelsantos.students.repositories.StudentRepository;
+import com.rafaelsantos.students.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -60,6 +61,17 @@ class StudentServiceImplTest {
         assertEquals(SURNAME, response.getSurname());
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PHONE_NUMBER, response.getPhoneNumber());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException(){
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Object not found"));
+        try {
+            service.findById(ID);
+        }catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("Object not found", ex.getMessage());
+        }
     }
 
     @Test
