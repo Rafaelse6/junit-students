@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,6 +28,8 @@ class StudentServiceImplTest {
     private static final String SURNAME = "Santos";
     private static final String EMAIL = "rafael@email.com";
     private static final String PHONE_NUMBER = "1111111111";
+    private static final String OBJECT_NOT_FOUND = "Object not found";
+    private static final int INDEX = 0;
     @InjectMocks
     private StudentServiceImpl service;
 
@@ -65,17 +68,29 @@ class StudentServiceImplTest {
 
     @Test
     void whenFindByIdThenReturnAnObjectNotFoundException(){
-        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Object not found"));
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException(OBJECT_NOT_FOUND));
         try {
             service.findById(ID);
         }catch (Exception ex){
             assertEquals(ObjectNotFoundException.class, ex.getClass());
-            assertEquals("Object not found", ex.getMessage());
+            assertEquals(OBJECT_NOT_FOUND, ex.getMessage());
         }
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAListOfStudents() {
+        when(repository.findAll()).thenReturn(List.of(student));
+
+        List<Student> response = service.findAll();
+
+        assertNotNull(response);
+        assertEquals(1,response.size());
+        assertEquals(Student.class, response.get(INDEX).getClass());
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(NAME, response.get(INDEX).getName());
+        assertEquals(SURNAME, response.get(INDEX).getSurname());
+        assertEquals(EMAIL, response.get(INDEX).getEmail());
+        assertEquals(PHONE_NUMBER, response.get(INDEX).getPhoneNumber());
     }
 
     @Test
