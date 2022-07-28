@@ -161,6 +161,18 @@ class StudentServiceImplTest {
         verify(repository, times(1)).deleteById(anyInt());
     }
 
+    @Test
+    void deleteWithObjectNotFoundException(){
+       when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException(OBJECT_NOT_FOUND));
+
+       try {
+           service.delete(ID);
+       }catch (Exception ex){
+           assertEquals(ObjectNotFoundException.class, ex.getClass());
+           assertEquals(OBJECT_NOT_FOUND, ex.getMessage());
+       }
+    }
+
     private void startStudent(){
         student = new Student(ID, NAME, SURNAME, EMAIL, PHONE_NUMBER);
 
