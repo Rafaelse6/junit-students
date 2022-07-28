@@ -31,6 +31,7 @@ class StudentServiceImplTest {
     private static final String PHONE_NUMBER = "1111111111";
     private static final String OBJECT_NOT_FOUND = "Object not found";
     private static final int INDEX = 0;
+    private static final String E_MAIL_ALREADY_IN_USE = "E-mail already in use";
     @InjectMocks
     private StudentServiceImpl service;
 
@@ -118,7 +119,7 @@ class StudentServiceImplTest {
             service.create(studentDTO);
         }catch (Exception ex ){
             assertEquals(DataIntegrityViolationException.class, ex.getClass());
-            assertEquals("E-mail already in use", ex.getMessage());
+            assertEquals(E_MAIL_ALREADY_IN_USE, ex.getMessage());
         }
     }
 
@@ -135,6 +136,19 @@ class StudentServiceImplTest {
         assertEquals(SURNAME, response.getSurname());
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PHONE_NUMBER, response.getPhoneNumber());
+    }
+
+    @Test
+    void whenUpdateThenReturnADataIntegrityViolationException() {
+        when(repository.findByEmail(anyString())).thenReturn(optionalStudent);
+
+        try {
+            optionalStudent.get().setId(2);
+            service.create(studentDTO);
+        }catch (Exception ex ){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals(E_MAIL_ALREADY_IN_USE, ex.getMessage());
+        }
     }
 
     @Test
