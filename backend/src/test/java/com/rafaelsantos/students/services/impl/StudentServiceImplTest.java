@@ -123,7 +123,18 @@ class StudentServiceImplTest {
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSuccess() {
+        when(repository.save(any())).thenReturn(student);
+
+        Student response = service.update(studentDTO);
+
+        assertNotNull(response);
+        assertEquals(Student.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(SURNAME, response.getSurname());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PHONE_NUMBER, response.getPhoneNumber());
     }
 
     @Test
