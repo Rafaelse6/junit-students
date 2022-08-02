@@ -29,7 +29,8 @@ public class StudentResource {
 
     @GetMapping
     public ResponseEntity<List<StudentDTO>> findAll(){
-        return ResponseEntity.ok().body(service.findAll().stream().map(x -> mapper.map(x, StudentDTO.class)).collect(Collectors.toList()));
+        return ResponseEntity.ok().body(service.findAll().stream().map(x -> mapper.map(x, StudentDTO.class))
+                .collect(Collectors.toList()));
     }
 
     @PostMapping
